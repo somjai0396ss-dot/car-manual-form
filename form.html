@@ -1,225 +1,187 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Download Manual</title>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
-
 <style>
-:root{
-  --bg:#ffffff;
-  --text:#000000;
-  --sub:#6b7280;
-  --border:#e5e7eb;
-  --radius:14px;
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-*{
-  box-sizing:border-box;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #f4f4f4;
+  display: flex;
+  justify-content: center;
 }
 
-html,body{
-  margin:0;
-  padding:0;
-  height:100%;
-  background:var(--bg);
-  color:var(--text);
+.container {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
 }
 
-/* Safe area full screen */
-body{
-  padding:
-    env(safe-area-inset-top)
-    env(safe-area-inset-right)
-    env(safe-area-inset-bottom)
-    env(safe-area-inset-left);
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 24px;
 }
 
-/* Layout */
-.wrapper{
-  min-height:100%;
-  display:flex;
-  justify-content:center;
+.field {
+  margin-bottom: 16px;
 }
 
-.container{
-  width:100%;
-  max-width:420px;
-  padding:28px 22px 40px;
+label {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 6px;
 }
 
-/* Header */
-h1{
-  font-size:30px;
-  line-height:1.2;
-  margin:0 0 8px;
-  font-weight:700;
+.required {
+  color: red;
 }
 
-.subtitle{
-  font-size:15px;
-  color:var(--sub);
-  margin-bottom:28px;
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  font-size: 16px;
 }
 
-/* Input group */
-.field{
-  margin-bottom:18px;
+input:focus {
+  outline: none;
+  border-color: #000;
 }
 
-label{
-  display:block;
-  font-size:13px;
-  color:var(--sub);
-  margin-bottom:6px;
+.error {
+  display: none;
+  color: red;
+  font-size: 13px;
+  margin-top: 6px;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="tel"]{
-  width:100%;
-  padding:16px 16px;
-  font-size:16px;
-  border-radius:var(--radius);
-  border:1px solid var(--border);
-  outline:none;
+.checkbox {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
-input:focus{
-  border-color:#000;
+button {
+  width: 100%;
+  margin-top: 24px;
+  padding: 16px;
+  font-size: 18px;
+  border-radius: 999px;
+  border: none;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
 }
 
-/* Checkbox */
-.checkbox{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  margin:22px 0 28px;
+button:disabled {
+  background: #999;
 }
 
-.checkbox input{
-  margin-top:4px;
-}
-
-.checkbox label{
-  font-size:14px;
-  line-height:1.4;
-  color:#111;
-}
-
-/* Button */
-button{
-  width:100%;
-  padding:18px;
-  font-size:16px;
-  font-weight:600;
-  color:#fff;
-  background:#000;
-  border:none;
-  border-radius:999px;
-  cursor:pointer;
-}
-
-button:active{
-  transform:scale(0.98);
-}
-
-/* Footer hint */
-.footer{
-  margin-top:18px;
-  text-align:center;
-  font-size:12px;
-  color:var(--sub);
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #777;
+  margin-top: 16px;
 }
 </style>
 </head>
 
 <body>
-<div class="wrapper">
-  <div class="container">
+<div class="container">
+  <h1>Please fill out the form to download</h1>
 
-    <h1>Download คู่มือรถ</h1>
-    <div class="subtitle">
-      กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ
+  <form id="form">
+    <div class="field">
+      <label>ชื่อ - นามสกุล <span class="required">*</span></label>
+      <input id="name">
+      <div class="error">กรุณากรอกชื่อ</div>
     </div>
 
     <div class="field">
-      <label>ชื่อ – นามสกุล</label>
-      <input id="name" type="text" placeholder="Your name">
+      <label>Email <span class="required">*</span></label>
+      <input id="email" type="email">
+      <div class="error">กรุณากรอกอีเมล</div>
     </div>
 
     <div class="field">
-      <label>Email</label>
-      <input id="email" type="email" placeholder="you@email.com">
-    </div>
-
-    <div class="field">
-      <label>เบอร์โทรศัพท์</label>
-      <input id="phone" type="tel" placeholder="08x-xxx-xxxx">
+      <label>เบอร์โทรศัพท์ <span class="required">*</span></label>
+      <input id="phone" type="tel">
+      <div class="error">กรุณากรอกเบอร์โทรศัพท์</div>
     </div>
 
     <div class="checkbox">
       <input type="checkbox" id="consent">
-      <label for="consent">
+      <label>
         ฉันยินยอมให้บริษัทติดต่อกลับ และยอมรับนโยบายความเป็นส่วนตัว
+        <span class="required">*</span>
       </label>
     </div>
+    <div class="error" id="consentError">กรุณายินยอมก่อนดาวน์โหลด</div>
 
-    <button onclick="submitForm()">
-      ดาวน์โหลดคู่มือ →
-    </button>
+    <button type="submit">ดาวน์โหลดคู่มือ →</button>
+  </form>
 
-    <div class="footer">
-      ข้อมูลของคุณจะถูกเก็บเป็นความลับ
-    </div>
-
-  </div>
+  <div class="footer">ข้อมูลของคุณจะถูกเก็บเป็นความลับ</div>
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const model = params.get("model");
+const WEB_APP_URL =
+  "https://script.google.com/macros/s/AKfycbxhECjvAHCNaC7ewwhpNHIobdkR37-Sq51RNmGzYkSHBuyn4iOvUO1k_cR_xeuLxtY/exec";
 
-function submitForm(){
-  if(!name.value || !email.value || !phone.value){
-    alert("กรุณากรอกข้อมูลให้ครบ");
-    return;
-  }
-  if(!consent.checked){
-    alert("กรุณายินยอมให้ติดต่อกลับ");
-    return;
-  }
+const manuals = {
+  Nexi: "https://drive.google.com/file/d/176BzRWMbCgFNKiYgHfF5VW_BF6zIFrH0/view",
+  Vink: "https://drive.google.com/file/d/1EM_RBW6XqpOVycDKMduTkfH07nUetLyd/view",
+  Ren: "https://drive.google.com/file/d/1dP6zPRT1nRkPkRCBRMm6A9zNOn7d5vwd/view",
+  Ying: "https://drive.google.com/file/d/1A4D91rJCbVpAd8pr958xXRDGgFJcte1e/view",
+  Mew: "https://drive.google.com/file/d/1gA5igltOxVCULbjot_UplMj9GSq4Z2JG/view",
+  Slice: "https://drive.google.com/file/d/1FUXx2l15O9lqrLO9_oxq-nd5j_vrDENI/view"
+};
 
-  fetch("https://script.google.com/macros/s/AKfycbxhECjvAHCNaC7ewwhpNHIobdkR37-Sq51RNmGzYkSHBuyn4iOvUO1k_cR_xeuLxtY/exec",{
-    method:"POST",
-    body:JSON.stringify({
-      name:name.value,
-      email:email.value,
-      phone:phone.value,
-      model:model
+const model = new URLSearchParams(window.location.search).get("model") || "Unknown";
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const name = document.getElementById("name");
+  const email = document.getElementById("email");
+  const phone = document.getElementById("phone");
+  const consent = document.getElementById("consent");
+
+  let valid = true;
+  document.querySelectorAll(".error").forEach(el => el.style.display = "none");
+
+  if (!name.value.trim()) { name.nextElementSibling.style.display = "block"; valid = false; }
+  if (!email.value.trim()) { email.nextElementSibling.style.display = "block"; valid = false; }
+  if (!phone.value.trim()) { phone.nextElementSibling.style.display = "block"; valid = false; }
+  if (!consent.checked) { document.getElementById("consentError").style.display = "block"; valid = false; }
+
+  if (!valid) return;
+
+  fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: name.value,
+      email: email.value,
+      phone: phone.value,
+      model: model
     })
-  }).then(()=>{
-    const links={
-      Nexi:"https://drive.google.com/file/d/176BzRWMbCgFNKiYgHfF5VW_BF6zIFrH0/view?usp=sharing",
-      Vink:"https://drive.google.com/file/d/1EM_RBW6XqpOVycDKMduTkfH07nUetLyd/view?usp=sharing",
-      Ren:"https://drive.google.com/file/d/1dP6zPRT1nRkPkRCBRMm6A9zNOn7d5vwd/view?usp=sharing/...",
-      Ying:"https://drive.google.com/file/d/1A4D91rJCbVpAd8pr958xXRDGgFJcte1e/view?usp=sharing",
-      Mew:"https://drive.google.com/file/d/1gA5igltOxVCULbjot_UplMj9GSq4Z2JG/view?usp=sharing",
-      Slice:"https://drive.google.com/file/d/1FUXx2l15O9lqrLO9_oxq-nd5j_vrDENI/view?usp=sharing"
-    };
-    window.location.href = links[model];
+  }).then(() => {
+    window.location.href = manuals[model] || manuals["Nexi"];
   });
-}
-
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("service-worker.js");
-}
+});
 </script>
-
 </body>
 </html>
