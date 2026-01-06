@@ -3,11 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
 <title>Download Manual</title>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
 
 <style>
 :root{
@@ -15,247 +11,142 @@
   --text:#000000;
   --sub:#6b7280;
   --border:#e5e7eb;
+  --error:#dc2626;
   --radius:14px;
 }
 
-*{
-  box-sizing:border-box;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-}
+*{ box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto; }
 
-html,body{
-  margin:0;
-  padding:0;
-  height:100%;
-  background:var(--bg);
-  color:var(--text);
-}
+html,body{ margin:0; height:100%; background:var(--bg); color:var(--text); }
 
-/* Safe area full screen */
-body{
-  padding:
-    env(safe-area-inset-top)
-    env(safe-area-inset-right)
-    env(safe-area-inset-bottom)
-    env(safe-area-inset-left);
-}
+.wrapper{ min-height:100%; display:flex; justify-content:center; }
+.container{ width:100%; max-width:420px; padding:28px 22px 40px; }
 
-/* Layout */
-.wrapper{
-  min-height:100%;
-  display:flex;
-  justify-content:center;
-}
+h1{ font-size:30px; margin-bottom:8px; }
+.subtitle{ font-size:15px; color:var(--sub); margin-bottom:28px; }
 
-.container{
+.field{ margin-bottom:16px; }
+label{ font-size:13px; color:var(--sub); display:block; margin-bottom:6px; }
+
+input{
   width:100%;
-  max-width:420px;
-  padding:28px 22px 40px;
-}
-
-/* Header */
-h1{
-  font-size:30px;
-  line-height:1.2;
-  margin:0 0 8px;
-  font-weight:700;
-}
-
-.subtitle{
-  font-size:15px;
-  color:var(--sub);
-  margin-bottom:28px;
-}
-
-/* Input group */
-.field{
-  margin-bottom:18px;
-}
-
-label{
-  display:block;
-  font-size:13px;
-  color:var(--sub);
-  margin-bottom:6px;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="tel"]{
-  width:100%;
-  padding:16px 16px;
+  padding:16px;
   font-size:16px;
   border-radius:var(--radius);
   border:1px solid var(--border);
-  outline:none;
 }
 
-input:focus{
-  border-color:#000;
+input.error{ border-color:var(--error); }
+
+.error-text{
+  font-size:12px;
+  color:var(--error);
+  margin-top:6px;
 }
 
-/* Checkbox */
-.checkbox{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  margin:22px 0 28px;
-}
+.checkbox{ display:flex; gap:10px; margin:22px 0 28px; }
+.checkbox label{ font-size:14px; }
 
-.checkbox input{
-  margin-top:4px;
-}
-
-.checkbox label{
-  font-size:14px;
-  line-height:1.4;
-  color:#111;
-}
-
-/* Button */
 button{
   width:100%;
   padding:18px;
-  font-size:16px;
-  font-weight:600;
-  color:#fff;
   background:#000;
+  color:#fff;
   border:none;
   border-radius:999px;
+  font-size:16px;
   cursor:pointer;
 }
 
-button:active{
-  transform:scale(0.98);
-}
-
-/* Footer hint */
-.footer{
-  margin-top:18px;
-  text-align:center;
-  font-size:12px;
-  color:var(--sub);
-}
+.footer{ margin-top:18px; text-align:center; font-size:12px; color:var(--sub); }
 </style>
 </head>
 
 <body>
 <div class="wrapper">
-  <div class="container">
+<div class="container">
 
-    <h1>Download คู่มือรถ</h1>
-    <div class="subtitle">
-      กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ
-    </div>
+<h1>Download คู่มือรถ</h1>
+<div class="subtitle">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</div>
 
-    <div class="field">
-      <label>ชื่อ – นามสกุล</label>
-      <input id="name" type="text" placeholder="Your name">
-    </div>
-
-    <div class="field">
-      <label>Email</label>
-      <input id="email" type="email" placeholder="you@email.com">
-    </div>
-
-    <div class="field">
-      <label>เบอร์โทรศัพท์</label>
-      <input id="phone" type="tel" placeholder="08x-xxx-xxxx">
-    </div>
-
-    <div class="checkbox">
-      <input type="checkbox" id="consent">
-      <label for="consent">
-        ฉันยินยอมให้บริษัทติดต่อกลับ และยอมรับนโยบายความเป็นส่วนตัว
-      </label>
-    </div>
-
-    <button onclick="submitForm()">
-      ดาวน์โหลดคู่มือ →
-    </button>
-
-    <div class="footer">
-      ข้อมูลของคุณจะถูกเก็บเป็นความลับ
-    </div>
-
-  </div>
+<div class="field">
+  <label>ชื่อ – นามสกุล *</label>
+  <input id="name">
+  <div class="error-text" id="err-name"></div>
 </div>
+
+<div class="field">
+  <label>Email *</label>
+  <input id="email" type="email">
+  <div class="error-text" id="err-email"></div>
+</div>
+
+<div class="field">
+  <label>เบอร์โทรศัพท์ *</label>
+  <input id="phone" type="tel">
+  <div class="error-text" id="err-phone"></div>
+</div>
+
+<div class="checkbox">
+  <input type="checkbox" id="consent">
+  <label for="consent">ยินยอมให้ติดต่อกลับ *</label>
+</div>
+<div class="error-text" id="err-consent"></div>
+
+<button onclick="submitForm()">ดาวน์โหลดคู่มือ →</button>
+
+<div class="footer">ข้อมูลของคุณจะถูกเก็บเป็นความลับ</div>
+
+</div>
+</div>
+
 <script>
-const WEB_APP_URL =
-  "https://script.google.com/macros/s/AKfycbxhECjvAHCNaC7ewwhpNHIobdkR37-Sq51RNmGzYkSHBuyn4iOvUO1k_cR_xeuLxtY/exec";
+const ENDPOINT = "🔁 วาง Web App URL ตรงนี้";
 
-const manuals = {
-  Nexi: "https://drive.google.com/file/d/176BzRWMbCgFNKiYgHfF5VW_BF6zIFrH0/view",
-  Vink: "https://drive.google.com/file/d/1EM_RBW6XqpOVycDKMduTkfH07nUetLyd/view",
-  Ren: "https://drive.google.com/file/d/1dP6zPRT1nRkPkRCBRMm6A9zNOn7d5vwd/view",
-  Ying: "https://drive.google.com/file/d/1A4D91rJCbVpAd8pr958xXRDGgFJcte1e/view",
-  Mew: "https://drive.google.com/file/d/1gA5igltOxVCULbjot_UplMj9GSq4Z2JG/view",
-  Slice: "https://drive.google.com/file/d/1FUXx2l15O9lqrLO9_oxq-nd5j_vrDENI/view"
-};
-
-const model =
-  new URLSearchParams(window.location.search).get("model") || "Nexi";
-
-document.getElementById("form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
+function submitForm(){
   let valid = true;
 
-  document.querySelectorAll(".error").forEach(el => el.style.display = "none");
-
-  const name = document.getElementById("name");
-  const email = document.getElementById("email");
-  const phone = document.getElementById("phone");
+  const name = nameEl = document.getElementById("name");
+  const email = emailEl = document.getElementById("email");
+  const phone = phoneEl = document.getElementById("phone");
   const consent = document.getElementById("consent");
 
-  if (!name.value.trim()) {
-    name.nextElementSibling.style.display = "block";
-    valid = false;
-  }
+  clearErrors();
 
-  if (!email.value.trim()) {
-    email.nextElementSibling.style.display = "block";
-    valid = false;
-  }
+  if(!name.value.trim()){ showError(name,"err-name","กรุณากรอกชื่อ"); valid=false; }
+  if(!email.value.trim()){ showError(email,"err-email","กรุณากรอกอีเมล"); valid=false; }
+  if(!phone.value.trim()){ showError(phone,"err-phone","กรุณากรอกเบอร์โทร"); valid=false; }
+  if(!consent.checked){ document.getElementById("err-consent").textContent="กรุณายินยอม"; valid=false; }
 
-  if (!phone.value.trim()) {
-    phone.nextElementSibling.style.display = "block";
-    valid = false;
-  }
+  if(!valid) return;
 
-  if (!consent.checked) {
-    document.getElementById("consentError").style.display = "block";
-    valid = false;
-  }
-
-  if (!valid) return;
-
-  try {
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: name.value.trim(),
-        email: email.value.trim(),
-        phone: phone.value.trim(),
-        model: model
-      })
-    });
-
-    const result = await res.json();
-
-    if (result.success) {
-      window.location.href = manuals[model];
-    } else {
-      alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
+  fetch(ENDPOINT,{
+    method:"POST",
+    body:JSON.stringify({
+      name:name.value,
+      email:email.value,
+      phone:phone.value,
+      consent:consent.checked
+    })
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.success){
+      window.location.href="manual.pdf"; // 👈 ลิงก์คู่มือ
     }
+  });
+}
 
-  } catch (err) {
-    alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
-  }
-});
+function showError(input,id,msg){
+  input.classList.add("error");
+  document.getElementById(id).textContent=msg;
+}
+
+function clearErrors(){
+  document.querySelectorAll(".error-text").forEach(e=>e.textContent="");
+  document.querySelectorAll("input").forEach(i=>i.classList.remove("error"));
+}
 </script>
+
 </body>
 </html>
