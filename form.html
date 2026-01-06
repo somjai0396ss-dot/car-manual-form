@@ -137,7 +137,7 @@ button:disabled {
 
 <script>
 const WEB_APP_URL =
-  "https://script.google.com/macros/s/AKfycbxhECjvAHCNaC7ewwhpNHIobdkR37-Sq51RNmGzYkSHBuyn4iOvUO1k_cR_xeuLxtY/exec";
+"https://script.google.com/macros/s/AKfycbxhECjvAHCNaC7ewwhpNHIobdkR37-Sq51RNmGzYkSHBuyn4iOvUO1k_cR_xeuLxtY/exec";
 
 const manuals = {
   Nexi: "https://drive.google.com/file/d/176BzRWMbCgFNKiYgHfF5VW_BF6zIFrH0/view",
@@ -148,7 +148,8 @@ const manuals = {
   Slice: "https://drive.google.com/file/d/1FUXx2l15O9lqrLO9_oxq-nd5j_vrDENI/view"
 };
 
-const model = new URLSearchParams(window.location.search).get("model") || "Unknown";
+const model =
+  new URLSearchParams(window.location.search).get("model") || "Nexi";
 
 document.getElementById("form").addEventListener("submit", e => {
   e.preventDefault();
@@ -168,16 +169,16 @@ document.getElementById("form").addEventListener("submit", e => {
 
   if (!valid) return;
 
+  const formData = new URLSearchParams();
+  formData.append("name", name.value);
+  formData.append("email", email.value);
+  formData.append("phone", phone.value);
+  formData.append("model", model);
+
   fetch(WEB_APP_URL, {
     method: "POST",
     mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: name.value,
-      email: email.value,
-      phone: phone.value,
-      model: model
-    })
+    body: formData
   }).then(() => {
     window.location.href = manuals[model] || manuals["Nexi"];
   });
