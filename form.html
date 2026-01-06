@@ -84,10 +84,6 @@ button {
   cursor: pointer;
 }
 
-button:disabled {
-  background: #999;
-}
-
 .footer {
   text-align: center;
   font-size: 12px;
@@ -136,6 +132,7 @@ button:disabled {
 </div>
 
 <script>
+/* ====== ตั้งค่า ====== */
 const WEB_APP_URL =
 "https://script.google.com/macros/s/AKfycbxhECjvAHCNaC7ewwhpNHIobdkR37-Sq51RNmGzYkSHBuyn4iOvUO1k_cR_xeuLxtY/exec";
 
@@ -148,9 +145,11 @@ const manuals = {
   Slice: "https://drive.google.com/file/d/1FUXx2l15O9lqrLO9_oxq-nd5j_vrDENI/view"
 };
 
+/* ====== อ่านรุ่นรถจาก URL ====== */
 const model =
   new URLSearchParams(window.location.search).get("model") || "Nexi";
 
+/* ====== Submit ====== */
 document.getElementById("form").addEventListener("submit", e => {
   e.preventDefault();
 
@@ -180,6 +179,7 @@ document.getElementById("form").addEventListener("submit", e => {
     mode: "no-cors",
     body: formData
   }).then(() => {
+    // 👉 ส่งเสร็จ ไปหน้าคู่มือทันที
     window.location.href = manuals[model] || manuals["Nexi"];
   });
 });
