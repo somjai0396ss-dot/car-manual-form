@@ -6,20 +6,27 @@
   <title>Download คู่มือรถ</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* ...CSS เดิม ใช้ชุดเดิมได้เลย... */
-    body { font-family: 'Sarabun', sans-serif; background: #f9f9f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-    .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 100%; max-width: 450px; }
-    h2 { margin-top: 0; margin-bottom: 10px; font-size: 28px; color: #000; }
-    input[type="text"], input[type="email"], input[type="tel"] { width: 100%; padding: 14px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-    button { background: #000; color: white; width: 100%; padding: 16px; border: none; border-radius: 50px; font-size: 18px; cursor: pointer; }
-    button:disabled { background: #ccc; }
+    body { font-family: 'Sarabun', sans-serif; background-color: #f9f9f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+    .container { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 100%; max-width: 450px; }
+    h2 { margin-top: 0; margin-bottom: 10px; font-size: 28px; color: #000; font-weight: 700; }
+    p.sub-head { color: #666; margin-bottom: 30px; font-size: 16px; }
+    label { display: block; margin-bottom: 8px; color: #555; font-size: 14px; font-weight: 500; }
+    input[type="text"], input[type="email"], input[type="tel"] { width: 100%; padding: 14px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; }
+    input:focus { border-color: #000; }
+    .checkbox-container { display: flex; align-items: flex-start; margin-bottom: 30px; font-size: 14px; color: #333; }
+    .checkbox-container input { margin-top: 4px; margin-right: 12px; transform: scale(1.2); }
+    button { background-color: #000; color: white; width: 100%; padding: 16px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+    button:hover { background-color: #333; }
+    button:disabled { background-color: #ccc; cursor: not-allowed; }
+    .footer { text-align: center; margin-top: 25px; color: #999; font-size: 12px; }
+    @media (max-width: 600px) { .container { padding: 30px 20px; } h2 { font-size: 24px; } }
   </style>
 </head>
 <body>
 
   <div class="container">
     <h2>Download คู่มือรถ</h2>
-    <p style="color:#666; margin-bottom:30px;">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</p>
+    <p class="sub-head">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</p>
 
     <form id="downloadForm">
       <input type="hidden" id="model" name="model">
@@ -33,45 +40,50 @@
       <label>เบอร์โทรศัพท์</label>
       <input type="tel" name="phone" placeholder="08x-xxx-xxxx" required>
 
-      <div style="margin-bottom:30px; display:flex;">
-        <input type="checkbox" required style="margin-right:10px;">
-        <span style="font-size:14px;">ฉันยินยอมให้บริษัทติดต่อกลับ</span>
+      <div class="checkbox-container">
+        <input type="checkbox" required>
+        <span>ฉันยินยอมให้บริษัทติดต่อกลับ และยอมรับนโยบายความเป็นส่วนตัว</span>
       </div>
 
       <button type="submit" id="btnSubmit">ดาวน์โหลดคู่มือ &rarr;</button>
     </form>
+    
+    <div class="footer">ข้อมูลของคุณจะถูกเก็บเป็นความลับ</div>
   </div>
 
   <script>
-    // 1. ดึงค่า Model จาก URL ของ GitHub Pages (เช่น yoursite.github.io?model=Nexi)
+    // 1. ตั้งค่า URL ของ Google Apps Script ที่คุณให้มา
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzIZAs3nhEvK8rPP-ulrpgvLtV6qxfHM-0SMy0xp33-6bZ4owzaR7uO9zpO-mxRcUL9ZQ/exec';
+
+    // 2. ดึงค่ารุ่นรถจาก URL (เช่น ?model=Nexi)
     const urlParams = new URLSearchParams(window.location.search);
     const modelFromUrl = urlParams.get('model') || "";
     document.getElementById('model').value = modelFromUrl;
-
-    // 2. ใส่ URL ของ Google Apps Script ที่ Deploy แล้วตรงนี้ !!!
-    const scriptURL = 'https://script.google.com/macros/s/xxxxxxxxxxxxxxxxx/exec'; 
 
     const form = document.forms['downloadForm'];
     const btn = document.getElementById('btnSubmit');
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      btn.innerHTML = "กำลังบันทึก...";
+      btn.innerHTML = "กำลังบันทึกข้อมูล...";
       btn.disabled = true;
 
+      // ส่งข้อมูลไปที่ Google Sheet
       fetch(scriptURL, { method: 'POST', body: new FormData(form)})
         .then(response => {
-           // เมื่อบันทึกเสร็จ ให้ Redirect ไป PDF
+           // สำเร็จ -> ไปหน้า PDF
            redirectToPDF(document.getElementById('model').value);
         })
         .catch(error => {
-           alert('Error!', error.message);
-           btn.disabled = false;
+           console.error('Error!', error.message);
+           // กรณีเชื่อมต่อไม่ได้ อาจจะให้ผ่านไปก่อน หรือแจ้งเตือน
+           alert("ระบบบันทึกขัดข้อง แต่คุณสามารถดาวน์โหลดได้");
+           redirectToPDF(document.getElementById('model').value);
         });
     });
 
     function redirectToPDF(modelCode) {
-      // ลิงก์ PDF
+      // ลิงก์ PDF ตามรุ่นที่คุณให้มา
       var pdfLinks = {
         "Nexi": "https://drive.google.com/file/d/176BzRWMbCgFNKiYgHfF5VW_BF6zIFrH0/view?usp=sharing",
         "Vink": "https://drive.google.com/file/d/1EM_RBW6XqpOVycDKMduTkfH07nUetLyd/view?usp=sharing",
@@ -94,8 +106,9 @@
       if (targetUrl) {
         window.location.href = targetUrl;
       } else {
-        alert("ไม่พบรุ่นรถ หรือบันทึกสำเร็จแล้ว");
-        window.location.reload(); // รีหน้าใหม่
+        alert("ไม่พบลิงก์สำหรับรุ่น: " + (modelCode || "ไม่ระบุ") + "\n(กรุณาตรวจสอบลิงก์อีกครั้ง)");
+        btn.innerHTML = "ดาวน์โหลดคู่มือ &rarr;";
+        btn.disabled = false;
       }
     }
   </script>
