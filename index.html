@@ -1,74 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download คู่มือรถ</title>
+  <title>Download Manual</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Sarabun', sans-serif; background-color: #f9f9f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-    .container { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 100%; max-width: 450px; }
-    h2 { margin-top: 0; margin-bottom: 10px; font-size: 28px; color: #000; font-weight: 700; }
-    p.sub-head { color: #666; margin-bottom: 30px; font-size: 16px; }
+    /* ดีไซน์เน้นความสะอาดตา */
+    body { font-family: 'Sarabun', sans-serif; background-color: #fff; margin: 0; padding: 10px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 480px; padding: 20px; background: #fff; }
     
-    label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; font-weight: 500; }
-    
-    /* Input Box Style */
-    input[type="text"], input[type="email"], input[type="tel"] { 
-      width: 100%; padding: 14px; margin-bottom: 5px; /* ลดระยะห่างเพื่อให้ตัวแดงอยู่ชิด */
-      border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; 
-      transition: border-color 0.3s;
-    }
-    input:focus { border-color: #000; }
-    
-    /* Style เมื่อข้อมูลไม่ถูกต้อง (ขอบแดง + พื้นหลังแดงอ่อน) */
-    input.invalid { border-color: #e74c3c !important; background-color: #fff8f8; }
+    h2 { text-align: center; margin-bottom: 5px; font-size: 24px; color: #000; }
+    p.sub { text-align: center; color: #666; margin-bottom: 25px; font-size: 15px; }
 
-    /* ข้อความแจ้งเตือนสีแดง */
-    .error-text {
-      color: #e74c3c;
-      font-size: 13px;
-      margin-bottom: 15px;
+    label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; font-size: 14px; }
+    input[type="text"], input[type="email"], input[type="tel"] {
+      width: 100%; padding: 12px; margin-bottom: 5px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box;
+      font-family: 'Sarabun', sans-serif;
+    }
+    input:focus { border-color: #000; outline: none; }
+    
+    /* กล่องแดงแจ้งเตือน */
+    .err-msg { 
+      color: #d32f2f; font-size: 13px; margin-bottom: 15px; 
+      background-color: #ffebee; padding: 8px; border-radius: 6px; 
       display: none; /* ซ่อนไว้ก่อน */
-      text-align: left;
     }
 
-    .checkbox-container { display: flex; align-items: flex-start; margin-bottom: 5px; margin-top: 15px; font-size: 14px; color: #333; }
-    .checkbox-container input { margin-top: 4px; margin-right: 12px; transform: scale(1.2); }
-    
-    button { background-color: #000; color: white; width: 100%; padding: 16px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
+    .checkbox-row { display: flex; align-items: flex-start; margin-top: 15px; }
+    .checkbox-row input { width: 20px; height: 20px; margin-right: 10px; margin-top: 2px; }
+    .checkbox-row span { font-size: 14px; color: #333; line-height: 1.4; }
+
+    button {
+      background-color: #000; color: #fff; width: 100%; padding: 15px; border: none; border-radius: 50px;
+      font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.2s;
+    }
     button:hover { background-color: #333; }
     button:disabled { background-color: #ccc; cursor: not-allowed; }
-    .footer { text-align: center; margin-top: 25px; color: #999; font-size: 12px; }
-    @media (max-width: 600px) { .container { padding: 30px 20px; } h2 { font-size: 24px; } }
+
+    .footer { text-align: center; margin-top: 20px; color: #999; font-size: 12px; }
   </style>
 </head>
 <body>
 
   <div class="container">
     <h2>Download คู่มือรถ</h2>
-    <p class="sub-head">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</p>
+    <p class="sub">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</p>
 
-    <form id="downloadForm" novalidate>
+    <form id="myForm" novalidate>
       <input type="hidden" id="model" name="model">
 
       <label>ชื่อ – นามสกุล</label>
-      <input type="text" id="name" name="name" placeholder="Your name">
-      <div class="error-text" id="err-name">กรุณากรอกชื่อ-นามสกุล</div>
+      <input type="text" id="name" name="name" placeholder="ระบุชื่อ-นามสกุล">
+      <div id="err_name" class="err-msg">⚠ กรุณากรอกชื่อ-นามสกุล</div>
 
       <label>Email</label>
       <input type="email" id="email" name="email" placeholder="you@email.com">
-      <div class="error-text" id="err-email">กรุณากรอกอีเมลให้ถูกต้อง</div>
+      <div id="err_email" class="err-msg">⚠ กรุณากรอกอีเมลให้ถูกต้อง</div>
 
       <label>เบอร์โทรศัพท์</label>
       <input type="tel" id="phone" name="phone" placeholder="08x-xxx-xxxx" maxlength="10">
-      <div class="error-text" id="err-phone">กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก</div>
+      <div id="err_phone" class="err-msg">⚠ กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก</div>
 
-      <div class="checkbox-container">
+      <div class="checkbox-row">
         <input type="checkbox" id="consent" name="consent">
-        <span>ฉันยินยอมให้บริษัทติดต่อกลับ </span>
+        <span>ฉันยินยอมให้บริษัทติดต่อกลับ</span>
       </div>
-      <div class="error-text" id="err-consent" style="margin-bottom: 20px;">กรุณายอมรับเงื่อนไขก่อนดาวน์โหลด</div>
+      <div id="err_consent" class="err-msg" style="margin-top: 10px;">⚠ กรุณายอมรับเงื่อนไข</div>
 
       <button type="submit" id="btnSubmit">ดาวน์โหลดคู่มือ &rarr;</button>
     </form>
@@ -77,101 +75,78 @@
   </div>
 
   <script>
-    // -----------------------------------------------------------
-    // 🔴 วาง URL ที่ได้จาก Google Apps Script ตรงนี้ (ในเครื่องหมายขีดเดียว)
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAQTxS5ADOjzwzz5uyixZvHM0SuQjhnH0l3FU68vS1Nc6iQEf2VlEWY2FRxZA2B8LvFA/exec'; 
-    // -----------------------------------------------------------
+    // URL ของ Google Apps Script (ตัวเดิมของคุณ)
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzAQTxS5ADOjzwzz5uyixZvHM0SuQjhnH0l3FU68vS1Nc6iQEf2VlEWY2FRxZA2B8LvFA/exec'; 
 
+    // รับค่ารุ่นรถจาก URL
     const urlParams = new URLSearchParams(window.location.search);
-    const modelFromUrl = urlParams.get('model') || "";
-    document.getElementById('model').value = modelFromUrl;
+    const modelVal = urlParams.get('model') || "";
+    document.getElementById('model').value = modelVal;
 
-    const form = document.getElementById('downloadForm');
+    const form = document.getElementById('myForm');
     const btn = document.getElementById('btnSubmit');
 
-    // ฟังก์ชันตรวจสอบข้อมูล (Validation)
-    function validateForm() {
-      let isValid = true;
-
-      // 1. ตรวจชื่อ (ห้ามว่าง)
-      const name = document.getElementById('name');
-      const errName = document.getElementById('err-name');
-      if (name.value.trim() === "") {
-        name.classList.add('invalid');
-        errName.style.display = 'block';
-        isValid = false;
-      } else {
-        name.classList.remove('invalid');
-        errName.style.display = 'none';
-      }
-
-      // 2. ตรวจอีเมล (Format ต้องถูกต้อง)
-      const email = document.getElementById('email');
-      const errEmail = document.getElementById('err-email');
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailPattern.test(email.value)) {
-        email.classList.add('invalid');
-        errEmail.style.display = 'block';
-        isValid = false;
-      } else {
-        email.classList.remove('invalid');
-        errEmail.style.display = 'none';
-      }
-
-      // 3. ตรวจเบอร์โทร (ต้องเป็นตัวเลข และครบ 10 หลักเป๊ะๆ)
-      const phone = document.getElementById('phone');
-      const errPhone = document.getElementById('err-phone');
-      const phoneVal = phone.value.replace(/\D/g, ''); // ตัดขีด ตัดเว้นวรรคออก นับแค่ตัวเลข
-      if (phoneVal.length !== 10) {
-        phone.classList.add('invalid');
-        errPhone.style.display = 'block';
-        isValid = false;
-      } else {
-        phone.classList.remove('invalid');
-        errPhone.style.display = 'none';
-      }
-
-      // 4. ตรวจ Checkbox ยินยอม
-      const consent = document.getElementById('consent');
-      const errConsent = document.getElementById('err-consent');
-      if (!consent.checked) {
-        errConsent.style.display = 'block';
-        isValid = false;
-      } else {
-        errConsent.style.display = 'none';
-      }
-
-      return isValid;
-    }
-
-    // เมื่อกดปุ่มส่ง
     form.addEventListener('submit', e => {
       e.preventDefault();
 
-      // เรียกใช้ฟังก์ชันตรวจสอบก่อน
-      if (!validateForm()) {
-        // ถ้าไม่ผ่าน ให้หยุดตรงนี้ (ไม่ส่งข้อมูล)
-        return; 
+      // --- ส่วนตรวจสอบความถูกต้อง (Validation) ---
+      let pass = true;
+      
+      // รีเซ็ตค่า Error
+      document.querySelectorAll('.err-msg').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('input').forEach(el => el.style.borderColor = '#ddd');
+
+      // ตรวจชื่อ
+      const name = document.getElementById('name');
+      if(!name.value.trim()){ 
+        document.getElementById('err_name').style.display = 'block'; 
+        name.style.borderColor = 'red'; 
+        pass = false; 
       }
 
-      btn.innerHTML = "กำลังบันทึกข้อมูล...";
-      btn.disabled = true;
+      // ตรวจอีเมล
+      const email = document.getElementById('email');
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)){ 
+        document.getElementById('err_email').style.display = 'block'; 
+        email.style.borderColor = 'red'; 
+        pass = false; 
+      }
 
-      // ถ้าผ่าน ให้ส่งข้อมูลไป Google Sheet
-      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-        .then(response => {
-           // สำเร็จ -> ไปหน้า PDF
-           redirectToPDF(document.getElementById('model').value);
+      // ตรวจเบอร์
+      const phone = document.getElementById('phone');
+      if(phone.value.replace(/\D/g,'').length !== 10){ 
+        document.getElementById('err_phone').style.display = 'block'; 
+        phone.style.borderColor = 'red'; 
+        pass = false; 
+      }
+
+      // ตรวจ Checkbox
+      const consent = document.getElementById('consent');
+      if(!consent.checked){ 
+        document.getElementById('err_consent').style.display = 'block'; 
+        pass = false; 
+      }
+
+      if(!pass) return; // ถ้าไม่ผ่าน หยุดตรงนี้
+
+      // --- ส่วนส่งข้อมูล ---
+      btn.innerHTML = "กำลังบันทึก...";
+      btn.disabled = true;
+      btn.style.backgroundColor = "#555";
+
+      // ใช้ mode: 'no-cors' เพื่อไม่ให้มันฟ้อง Error (แต่มันจะไม่ส่งผลลัพธ์กลับมา ซึ่งไม่เป็นไร เพราะเราจะ Redirect เลย)
+      fetch(SCRIPT_URL, { method: 'POST', body: new FormData(form), mode: 'no-cors'})
+        .then(() => {
+           goToPDF(document.getElementById('model').value);
         })
-        .catch(error => {
-           console.error('Error!', error.message);
-           // ถ้า Error (เช่นเน็ตหลุด) ก็ยังยอมให้ลูกค้าดาวน์โหลด
-           redirectToPDF(document.getElementById('model').value);
+        .catch(err => {
+           // ถึง Error ก็ไปต่อ (เพราะ no-cors อาจทำให้ดูเหมือน error ในบาง browser)
+           goToPDF(document.getElementById('model').value);
         });
     });
 
-    function redirectToPDF(modelCode) {
-      var pdfLinks = {
+    function goToPDF(modelName) {
+      const pdfs = {
         "Nexi": "https://drive.google.com/file/d/176BzRWMbCgFNKiYgHfF5VW_BF6zIFrH0/view?usp=sharing",
         "Vink": "https://drive.google.com/file/d/1EM_RBW6XqpOVycDKMduTkfH07nUetLyd/view?usp=sharing",
         "Ren": "https://drive.google.com/file/d/1dP6zPRT1nRkPkRCBRMm6A9zNOn7d5vwd/view?usp=sharing",
@@ -179,25 +154,23 @@
         "Mew": "https://drive.google.com/file/d/1gA5igltOxVCULbjot_UplMj9GSq4Z2JG/view?usp=sharing",
         "Slice": "https://drive.google.com/file/d/1FUXx2l15O9lqrLO9_oxq-nd5j_vrDENI/view?usp=sharing"
       };
-
-      var targetUrl = "";
-      if(modelCode) {
-        for (var key in pdfLinks) {
-          if (key.toLowerCase() === modelCode.trim().toLowerCase()) {
-            targetUrl = pdfLinks[key];
-            break;
-          }
+      
+      // ค้นหา Link แบบไม่สนตัวพิมพ์เล็กใหญ่
+      let target = "";
+      for (let key in pdfs) {
+        if (modelName && key.toLowerCase() === modelName.trim().toLowerCase()) {
+          target = pdfs[key];
+          break;
         }
       }
 
-      if (targetUrl) {
-        window.location.href = targetUrl;
+      if(target) {
+        window.top.location.href = target; // ใช้ window.top เพื่อให้เปลี่ยนหน้าหลัก ไม่ใช่แค่ใน iframe
       } else {
-        alert("บันทึกสำเร็จ! (แต่ไม่พบลิงก์รุ่นรถ)");
-        window.location.reload();
+        alert("บันทึกสำเร็จ!");
+        window.top.location.reload();
       }
     }
   </script>
-
 </body>
 </html>
