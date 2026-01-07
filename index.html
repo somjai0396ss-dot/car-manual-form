@@ -1,72 +1,88 @@
 <!DOCTYPE html>
-<html lang="th">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download Manual</title>
+  <title>Download คู่มือรถ</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* ดีไซน์เน้นความสะอาดตา */
-    body { font-family: 'Sarabun', sans-serif; background-color: #fff; margin: 0; padding: 10px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 480px; padding: 20px; background: #fff; }
+    /* ดีไซน์เดิม 100% */
+    body {
+      font-family: 'Sarabun', sans-serif; 
+      background-color: transparent;
+      margin: 0; padding: 0;
+      display: flex; justify-content: center;
+    }
+    .container {
+      background-color: white; 
+      padding: 20px; 
+      width: 100%; 
+      max-width: 500px;
+    }
+    h2 {
+      margin-top: 0; margin-bottom: 10px; font-size: 28px;
+      color: #000; font-weight: 700;
+    }
+    p.sub-head {
+      color: #666; margin-bottom: 20px; font-size: 16px;
+    }
+    label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; font-weight: 500; }
     
-    h2 { text-align: center; margin-bottom: 5px; font-size: 24px; color: #000; }
-    p.sub { text-align: center; color: #666; margin-bottom: 25px; font-size: 15px; }
-
-    label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; font-size: 14px; }
-    input[type="text"], input[type="email"], input[type="tel"] {
-      width: 100%; padding: 12px; margin-bottom: 5px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box;
+    input[type="text"], input[type="email"], input[type="tel"] { 
+      width: 100%; padding: 14px; margin-bottom: 5px; 
+      border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; 
+      transition: border-color 0.3s;
       font-family: 'Sarabun', sans-serif;
     }
-    input:focus { border-color: #000; outline: none; }
+    input:focus { border-color: #000; }
+    input.invalid { border-color: #e74c3c !important; background-color: #fff8f8; }
     
-    /* กล่องแดงแจ้งเตือน */
-    .err-msg { 
-      color: #d32f2f; font-size: 13px; margin-bottom: 15px; 
-      background-color: #ffebee; padding: 8px; border-radius: 6px; 
-      display: none; /* ซ่อนไว้ก่อน */
+    .error-text {
+      color: #e74c3c;
+      font-size: 13px;
+      margin-bottom: 15px;
+      display: none;
+      text-align: left;
     }
-
-    .checkbox-row { display: flex; align-items: flex-start; margin-top: 15px; }
-    .checkbox-row input { width: 20px; height: 20px; margin-right: 10px; margin-top: 2px; }
-    .checkbox-row span { font-size: 14px; color: #333; line-height: 1.4; }
-
+    
+    .checkbox-container { display: flex; align-items: flex-start; margin-bottom: 5px; margin-top: 15px; font-size: 14px; color: #333; }
+    .checkbox-container input { margin-top: 4px; margin-right: 12px; transform: scale(1.2); }
+    
     button {
-      background-color: #000; color: #fff; width: 100%; padding: 15px; border: none; border-radius: 50px;
-      font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.2s;
+      background-color: #000; color: white; width: 100%; padding: 16px; 
+      border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 10px; 
     }
     button:hover { background-color: #333; }
     button:disabled { background-color: #ccc; cursor: not-allowed; }
-
-    .footer { text-align: center; margin-top: 20px; color: #999; font-size: 12px; }
+    .footer { text-align: center; margin-top: 25px; color: #999; font-size: 12px; }
   </style>
 </head>
 <body>
 
   <div class="container">
     <h2>Download คู่มือรถ</h2>
-    <p class="sub">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</p>
+    <p class="sub-head">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</p>
 
-    <form id="myForm" novalidate>
+    <form id="downloadForm" novalidate>
       <input type="hidden" id="model" name="model">
 
       <label>ชื่อ – นามสกุล</label>
       <input type="text" id="name" name="name" placeholder="ระบุชื่อ-นามสกุล">
-      <div id="err_name" class="err-msg">⚠ กรุณากรอกชื่อ-นามสกุล</div>
+      <div class="error-text" id="err-name">กรุณากรอกชื่อ-นามสกุล</div>
 
       <label>Email</label>
       <input type="email" id="email" name="email" placeholder="you@email.com">
-      <div id="err_email" class="err-msg">⚠ กรุณากรอกอีเมลให้ถูกต้อง</div>
+      <div class="error-text" id="err-email">กรุณากรอกอีเมลให้ถูกต้อง</div>
 
       <label>เบอร์โทรศัพท์</label>
       <input type="tel" id="phone" name="phone" placeholder="08x-xxx-xxxx" maxlength="10">
-      <div id="err_phone" class="err-msg">⚠ กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก</div>
+      <div class="error-text" id="err-phone">กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก</div>
 
-      <div class="checkbox-row">
+      <div class="checkbox-container">
         <input type="checkbox" id="consent" name="consent">
-        <span>ฉันยินยอมให้บริษัทติดต่อกลับ</span>
+        <span>ฉันยินยอมให้บริษัทติดต่อกลับ </span>
       </div>
-      <div id="err_consent" class="err-msg" style="margin-top: 10px;">⚠ กรุณายอมรับเงื่อนไข</div>
+      <div class="error-text" id="err-consent" style="margin-bottom: 20px;">กรุณายอมรับเงื่อนไขก่อนดาวน์โหลด</div>
 
       <button type="submit" id="btnSubmit">ดาวน์โหลดคู่มือ &rarr;</button>
     </form>
@@ -75,78 +91,70 @@
   </div>
 
   <script>
-    // URL ของ Google Apps Script (ตัวเดิมของคุณ)
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzAQTxS5ADOjzwzz5uyixZvHM0SuQjhnH0l3FU68vS1Nc6iQEf2VlEWY2FRxZA2B8LvFA/exec'; 
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAQTxS5ADOjzwzz5uyixZvHM0SuQjhnH0l3FU68vS1Nc6iQEf2VlEWY2FRxZA2B8LvFA/exec';
 
-    // รับค่ารุ่นรถจาก URL
     const urlParams = new URLSearchParams(window.location.search);
-    const modelVal = urlParams.get('model') || "";
-    document.getElementById('model').value = modelVal;
+    const modelFromUrl = urlParams.get('model') || "";
+    document.getElementById('model').value = modelFromUrl;
 
-    const form = document.getElementById('myForm');
+    const form = document.getElementById('downloadForm');
     const btn = document.getElementById('btnSubmit');
+
+    function validateForm() {
+      let isValid = true;
+      document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
+
+      const name = document.getElementById('name');
+      if (name.value.trim() === "") {
+        name.classList.add('invalid');
+        document.getElementById('err-name').style.display = 'block';
+        isValid = false;
+      }
+      const email = document.getElementById('email');
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email.value)) {
+        email.classList.add('invalid');
+        document.getElementById('err-email').style.display = 'block';
+        isValid = false;
+      }
+      const phone = document.getElementById('phone');
+      const phoneVal = phone.value.replace(/\D/g, '');
+      if (phoneVal.length !== 10) {
+        phone.classList.add('invalid');
+        document.getElementById('err-phone').style.display = 'block';
+        isValid = false;
+      }
+      const consent = document.getElementById('consent');
+      if (!consent.checked) {
+        document.getElementById('err-consent').style.display = 'block';
+        isValid = false;
+      }
+      return isValid;
+    }
 
     form.addEventListener('submit', e => {
       e.preventDefault();
+      if (!validateForm()) return;
 
-      // --- ส่วนตรวจสอบความถูกต้อง (Validation) ---
-      let pass = true;
-      
-      // รีเซ็ตค่า Error
-      document.querySelectorAll('.err-msg').forEach(el => el.style.display = 'none');
-      document.querySelectorAll('input').forEach(el => el.style.borderColor = '#ddd');
-
-      // ตรวจชื่อ
-      const name = document.getElementById('name');
-      if(!name.value.trim()){ 
-        document.getElementById('err_name').style.display = 'block'; 
-        name.style.borderColor = 'red'; 
-        pass = false; 
-      }
-
-      // ตรวจอีเมล
-      const email = document.getElementById('email');
-      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)){ 
-        document.getElementById('err_email').style.display = 'block'; 
-        email.style.borderColor = 'red'; 
-        pass = false; 
-      }
-
-      // ตรวจเบอร์
-      const phone = document.getElementById('phone');
-      if(phone.value.replace(/\D/g,'').length !== 10){ 
-        document.getElementById('err_phone').style.display = 'block'; 
-        phone.style.borderColor = 'red'; 
-        pass = false; 
-      }
-
-      // ตรวจ Checkbox
-      const consent = document.getElementById('consent');
-      if(!consent.checked){ 
-        document.getElementById('err_consent').style.display = 'block'; 
-        pass = false; 
-      }
-
-      if(!pass) return; // ถ้าไม่ผ่าน หยุดตรงนี้
-
-      // --- ส่วนส่งข้อมูล ---
-      btn.innerHTML = "กำลังบันทึก...";
+      btn.innerHTML = "กำลังไปหน้าดาวน์โหลด...";
       btn.disabled = true;
       btn.style.backgroundColor = "#555";
 
-      // ใช้ mode: 'no-cors' เพื่อไม่ให้มันฟ้อง Error (แต่มันจะไม่ส่งผลลัพธ์กลับมา ซึ่งไม่เป็นไร เพราะเราจะ Redirect เลย)
-      fetch(SCRIPT_URL, { method: 'POST', body: new FormData(form), mode: 'no-cors'})
+      // ส่งข้อมูลไป Google Sheet
+      fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'})
         .then(() => {
-           goToPDF(document.getElementById('model').value);
+           // กรณีสำเร็จ: ไปหน้า PDF ทันที
+           redirectToPDF(document.getElementById('model').value);
         })
-        .catch(err => {
-           // ถึง Error ก็ไปต่อ (เพราะ no-cors อาจทำให้ดูเหมือน error ในบาง browser)
-           goToPDF(document.getElementById('model').value);
+        .catch(() => {
+           // กรณี ERROR (เน็ตหลุด/Scriptพัง): ก็บังคับไปหน้า PDF เหมือนกัน
+           redirectToPDF(document.getElementById('model').value);
         });
     });
 
-    function goToPDF(modelName) {
-      const pdfs = {
+    function redirectToPDF(modelCode) {
+      var pdfLinks = {
         "Nexi": "https://drive.google.com/file/d/176BzRWMbCgFNKiYgHfF5VW_BF6zIFrH0/view?usp=sharing",
         "Vink": "https://drive.google.com/file/d/1EM_RBW6XqpOVycDKMduTkfH07nUetLyd/view?usp=sharing",
         "Ren": "https://drive.google.com/file/d/1dP6zPRT1nRkPkRCBRMm6A9zNOn7d5vwd/view?usp=sharing",
@@ -154,20 +162,21 @@
         "Mew": "https://drive.google.com/file/d/1gA5igltOxVCULbjot_UplMj9GSq4Z2JG/view?usp=sharing",
         "Slice": "https://drive.google.com/file/d/1FUXx2l15O9lqrLO9_oxq-nd5j_vrDENI/view?usp=sharing"
       };
-      
-      // ค้นหา Link แบบไม่สนตัวพิมพ์เล็กใหญ่
-      let target = "";
-      for (let key in pdfs) {
-        if (modelName && key.toLowerCase() === modelName.trim().toLowerCase()) {
-          target = pdfs[key];
-          break;
+
+      var targetUrl = "";
+      if(modelCode) {
+        for (var key in pdfLinks) {
+          if (key.toLowerCase() === modelCode.trim().toLowerCase()) {
+            targetUrl = pdfLinks[key];
+            break;
+          }
         }
       }
 
-      if(target) {
-        window.top.location.href = target; // ใช้ window.top เพื่อให้เปลี่ยนหน้าหลัก ไม่ใช่แค่ใน iframe
+      if (targetUrl) {
+        // เปลี่ยนหน้าทันที ไม่มีการแจ้งเตือน
+        window.top.location.href = targetUrl;
       } else {
-        alert("บันทึกสำเร็จ!");
         window.top.location.reload();
       }
     }
