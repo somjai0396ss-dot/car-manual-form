@@ -141,16 +141,13 @@
       btn.disabled = true;
       btn.style.backgroundColor = "#555";
 
-      // ส่งข้อมูลไป Google Sheet
-      fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'})
-        .then(() => {
-           // กรณีสำเร็จ: ไปหน้า PDF ทันที
-           redirectToPDF(document.getElementById('model').value);
-        })
-        .catch(() => {
-           // กรณี ERROR (เน็ตหลุด/Scriptพัง): ก็บังคับไปหน้า PDF เหมือนกัน
-           redirectToPDF(document.getElementById('model').value);
-        });
+      // 1. ส่งข้อมูลออกไปทันที (ไม่ต้องรอตอบรับ)
+      fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'});
+      
+      // 2. ตั้งเวลานับถอยหลัง 1.5 วินาที แล้วบังคับเปลี่ยนหน้าเลย (ไม่สนว่าส่งเสร็จไหม)
+      setTimeout(function() {
+         redirectToPDF(document.getElementById('model').value);
+      }, 1500); 
     });
 
     function redirectToPDF(modelCode) {
@@ -174,7 +171,6 @@
       }
 
       if (targetUrl) {
-        // เปลี่ยนหน้าทันที ไม่มีการแจ้งเตือน
         window.top.location.href = targetUrl;
       } else {
         window.top.location.reload();
