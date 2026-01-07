@@ -6,95 +6,168 @@
   <title>Download คู่มือรถ</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* ดีไซน์เดิม 100% */
-    body { font-family: 'Sarabun', sans-serif; background-color: transparent; margin: 0; padding: 0; display: flex; justify-content: center; }
-    .container { background-color: white; padding: 20px; width: 100%; max-width: 500px; }
+    body { font-family: 'Sarabun', sans-serif; background-color: #f9f9f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+    .container { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 100%; max-width: 450px; }
     h2 { margin-top: 0; margin-bottom: 10px; font-size: 28px; color: #000; font-weight: 700; }
-    p.sub-head { color: #666; margin-bottom: 20px; font-size: 16px; }
+    p.sub-head { color: #666; margin-bottom: 30px; font-size: 16px; }
+    
     label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; font-weight: 500; }
+    
+    /* Input Box Style */
     input[type="text"], input[type="email"], input[type="tel"] { 
-      width: 100%; padding: 14px; margin-bottom: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; transition: border-color 0.3s; font-family: 'Sarabun', sans-serif;
+      width: 100%; padding: 14px; margin-bottom: 5px; /* ลดระยะห่างเพื่อให้ตัวแดงอยู่ชิด */
+      border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; 
+      transition: border-color 0.3s;
     }
     input:focus { border-color: #000; }
+    
+    /* Style เมื่อข้อมูลไม่ถูกต้อง (ขอบแดง + พื้นหลังแดงอ่อน) */
     input.invalid { border-color: #e74c3c !important; background-color: #fff8f8; }
-    .error-text { color: #e74c3c; font-size: 13px; margin-bottom: 15px; display: none; text-align: left; }
+
+    /* ข้อความแจ้งเตือนสีแดง */
+    .error-text {
+      color: #e74c3c;
+      font-size: 13px;
+      margin-bottom: 15px;
+      display: none; /* ซ่อนไว้ก่อน */
+      text-align: left;
+    }
+
     .checkbox-container { display: flex; align-items: flex-start; margin-bottom: 5px; margin-top: 15px; font-size: 14px; color: #333; }
     .checkbox-container input { margin-top: 4px; margin-right: 12px; transform: scale(1.2); }
+    
     button { background-color: #000; color: white; width: 100%; padding: 16px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
     button:hover { background-color: #333; }
     button:disabled { background-color: #ccc; cursor: not-allowed; }
     .footer { text-align: center; margin-top: 25px; color: #999; font-size: 12px; }
+    @media (max-width: 600px) { .container { padding: 30px 20px; } h2 { font-size: 24px; } }
   </style>
 </head>
 <body>
+
   <div class="container">
     <h2>Download คู่มือรถ</h2>
     <p class="sub-head">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</p>
+
     <form id="downloadForm" novalidate>
       <input type="hidden" id="model" name="model">
+
       <label>ชื่อ – นามสกุล</label>
-      <input type="text" id="name" name="name" placeholder="ระบุชื่อ-นามสกุล">
+      <input type="text" id="name" name="name" placeholder="Your name">
       <div class="error-text" id="err-name">กรุณากรอกชื่อ-นามสกุล</div>
+
       <label>Email</label>
       <input type="email" id="email" name="email" placeholder="you@email.com">
       <div class="error-text" id="err-email">กรุณากรอกอีเมลให้ถูกต้อง</div>
+
       <label>เบอร์โทรศัพท์</label>
       <input type="tel" id="phone" name="phone" placeholder="08x-xxx-xxxx" maxlength="10">
       <div class="error-text" id="err-phone">กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก</div>
+
       <div class="checkbox-container">
         <input type="checkbox" id="consent" name="consent">
         <span>ฉันยินยอมให้บริษัทติดต่อกลับ </span>
       </div>
       <div class="error-text" id="err-consent" style="margin-bottom: 20px;">กรุณายอมรับเงื่อนไขก่อนดาวน์โหลด</div>
+
       <button type="submit" id="btnSubmit">ดาวน์โหลดคู่มือ &rarr;</button>
     </form>
+    
     <div class="footer">ข้อมูลของคุณจะถูกเก็บเป็นความลับ</div>
   </div>
+
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAQTxS5ADOjzwzz5uyixZvHM0SuQjhnH0l3FU68vS1Nc6iQEf2VlEWY2FRxZA2B8LvFA/exec';
-    
-    // ดึงค่า model แต่ถ้าไม่มีค่ามา ให้ปล่อยว่างไว้ก่อน (เราจะไปจัดการตอน redirect)
+    // -----------------------------------------------------------
+    // 🔴 วาง URL ที่ได้จาก Google Apps Script ตรงนี้ (ในเครื่องหมายขีดเดียว)
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAQTxS5ADOjzwzz5uyixZvHM0SuQjhnH0l3FU68vS1Nc6iQEf2VlEWY2FRxZA2B8LvFA/exec'; 
+    // -----------------------------------------------------------
+
     const urlParams = new URLSearchParams(window.location.search);
-    document.getElementById('model').value = urlParams.get('model') || "";
+    const modelFromUrl = urlParams.get('model') || "";
+    document.getElementById('model').value = modelFromUrl;
 
     const form = document.getElementById('downloadForm');
     const btn = document.getElementById('btnSubmit');
 
+    // ฟังก์ชันตรวจสอบข้อมูล (Validation)
     function validateForm() {
       let isValid = true;
-      document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
-      document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
-      
+
+      // 1. ตรวจชื่อ (ห้ามว่าง)
       const name = document.getElementById('name');
-      if (!name.value.trim()) { name.classList.add('invalid'); document.getElementById('err-name').style.display = 'block'; isValid = false; }
-      
+      const errName = document.getElementById('err-name');
+      if (name.value.trim() === "") {
+        name.classList.add('invalid');
+        errName.style.display = 'block';
+        isValid = false;
+      } else {
+        name.classList.remove('invalid');
+        errName.style.display = 'none';
+      }
+
+      // 2. ตรวจอีเมล (Format ต้องถูกต้อง)
       const email = document.getElementById('email');
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { email.classList.add('invalid'); document.getElementById('err-email').style.display = 'block'; isValid = false; }
-      
+      const errEmail = document.getElementById('err-email');
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email.value)) {
+        email.classList.add('invalid');
+        errEmail.style.display = 'block';
+        isValid = false;
+      } else {
+        email.classList.remove('invalid');
+        errEmail.style.display = 'none';
+      }
+
+      // 3. ตรวจเบอร์โทร (ต้องเป็นตัวเลข และครบ 10 หลักเป๊ะๆ)
       const phone = document.getElementById('phone');
-      if (phone.value.replace(/\D/g, '').length !== 10) { phone.classList.add('invalid'); document.getElementById('err-phone').style.display = 'block'; isValid = false; }
-      
+      const errPhone = document.getElementById('err-phone');
+      const phoneVal = phone.value.replace(/\D/g, ''); // ตัดขีด ตัดเว้นวรรคออก นับแค่ตัวเลข
+      if (phoneVal.length !== 10) {
+        phone.classList.add('invalid');
+        errPhone.style.display = 'block';
+        isValid = false;
+      } else {
+        phone.classList.remove('invalid');
+        errPhone.style.display = 'none';
+      }
+
+      // 4. ตรวจ Checkbox ยินยอม
       const consent = document.getElementById('consent');
-      if (!consent.checked) { document.getElementById('err-consent').style.display = 'block'; isValid = false; }
-      
+      const errConsent = document.getElementById('err-consent');
+      if (!consent.checked) {
+        errConsent.style.display = 'block';
+        isValid = false;
+      } else {
+        errConsent.style.display = 'none';
+      }
+
       return isValid;
     }
 
+    // เมื่อกดปุ่มส่ง
     form.addEventListener('submit', e => {
       e.preventDefault();
-      if (!validateForm()) return;
 
-      btn.innerHTML = "กำลังไปหน้าดาวน์โหลด...";
+      // เรียกใช้ฟังก์ชันตรวจสอบก่อน
+      if (!validateForm()) {
+        // ถ้าไม่ผ่าน ให้หยุดตรงนี้ (ไม่ส่งข้อมูล)
+        return; 
+      }
+
+      btn.innerHTML = "กำลังบันทึกข้อมูล...";
       btn.disabled = true;
-      btn.style.backgroundColor = "#555";
 
-      // ส่งข้อมูล (Fire & Forget)
-      fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'});
-      
-      // นับ 1.5 วิ แล้วไปเลย
-      setTimeout(() => {
-         redirectToPDF(document.getElementById('model').value);
-      }, 1500); 
+      // ถ้าผ่าน ให้ส่งข้อมูลไป Google Sheet
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+           // สำเร็จ -> ไปหน้า PDF
+           redirectToPDF(document.getElementById('model').value);
+        })
+        .catch(error => {
+           console.error('Error!', error.message);
+           // ถ้า Error (เช่นเน็ตหลุด) ก็ยังยอมให้ลูกค้าดาวน์โหลด
+           redirectToPDF(document.getElementById('model').value);
+        });
     });
 
     function redirectToPDF(modelCode) {
@@ -108,26 +181,23 @@
       };
 
       var targetUrl = "";
-
-      // 1. ลองค้นหาลิงก์ตามรุ่นที่ส่งมา
       if(modelCode) {
         for (var key in pdfLinks) {
-          if (key.toLowerCase() === modelCode.trim().toLowerCase()) { targetUrl = pdfLinks[key]; break; }
+          if (key.toLowerCase() === modelCode.trim().toLowerCase()) {
+            targetUrl = pdfLinks[key];
+            break;
+          }
         }
       }
 
-      // 2. ถ้าหาไม่เจอ หรือ ลูกค้าไม่ได้เลือกรุ่นมา -> ให้ใช้ Nexi เป็นค่าเริ่มต้น (Default)
-      if (!targetUrl) {
-          targetUrl = pdfLinks["Nexi"];
-      }
-
-      // 3. ไปที่ลิงก์นั้นทันที
-      try {
-          window.top.location.href = targetUrl;
-      } catch (e) {
-          window.location.href = targetUrl;
+      if (targetUrl) {
+        window.location.href = targetUrl;
+      } else {
+        alert("บันทึกสำเร็จ! (แต่ไม่พบลิงก์รุ่นรถ)");
+        window.location.reload();
       }
     }
   </script>
+
 </body>
 </html>
