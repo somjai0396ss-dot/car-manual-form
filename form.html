@@ -1,152 +1,137 @@
 <!DOCTYPE html>
-<html lang="th">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Download Manual</title>
-
-<style>
-:root{
-  --bg:#ffffff;
-  --text:#000000;
-  --sub:#6b7280;
-  --border:#e5e7eb;
-  --error:#dc2626;
-  --radius:14px;
-}
-
-*{ box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto; }
-
-html,body{ margin:0; height:100%; background:var(--bg); color:var(--text); }
-
-.wrapper{ min-height:100%; display:flex; justify-content:center; }
-.container{ width:100%; max-width:420px; padding:28px 22px 40px; }
-
-h1{ font-size:30px; margin-bottom:8px; }
-.subtitle{ font-size:15px; color:var(--sub); margin-bottom:28px; }
-
-.field{ margin-bottom:16px; }
-label{ font-size:13px; color:var(--sub); display:block; margin-bottom:6px; }
-
-input{
-  width:100%;
-  padding:16px;
-  font-size:16px;
-  border-radius:var(--radius);
-  border:1px solid var(--border);
-}
-
-input.error{ border-color:var(--error); }
-
-.error-text{
-  font-size:12px;
-  color:var(--error);
-  margin-top:6px;
-}
-
-.checkbox{ display:flex; gap:10px; margin:22px 0 28px; }
-.checkbox label{ font-size:14px; }
-
-button{
-  width:100%;
-  padding:18px;
-  background:#000;
-  color:#fff;
-  border:none;
-  border-radius:999px;
-  font-size:16px;
-  cursor:pointer;
-}
-
-.footer{ margin-top:18px; text-align:center; font-size:12px; color:var(--sub); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Manual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ตั้งค่าฟอนต์และพื้นหลัง */
+    body { font-family: 'Sarabun', sans-serif; background: transparent; margin: 0; padding: 0; display: flex; justify-content: center; }
+    .container { background: white; padding: 20px; width: 100%; max-width: 500px; }
+    
+    /* หัวข้อ */
+    h2 { margin: 0 0 10px; font-size: 28px; color: #000; font-weight: 700; }
+    p.sub-head { color: #666; margin-bottom: 20px; font-size: 16px; }
+    
+    /* ป้ายชื่อ (Label) */
+    label { display: block; margin-bottom: 4px; color: #555; font-size: 14px; font-weight: 500; }
+    
+    /* ช่องกรอก (Input) - ปรับ margin-bottom ให้น้อยลง เพื่อให้ Error ชิดขึ้น */
+    input { width: 100%; padding: 14px; margin-bottom: 2px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; font-family: 'Sarabun', sans-serif; }
+    input:focus { border-color: #000; }
+    input.invalid { border-color: #e74c3c !important; background-color: #fff8f8; }
+    
+    /* ข้อความสีแดง (Error Text) - ปรับให้ชิดขึ้น */
+    .error-text { color: #e74c3c; font-size: 13px; margin-top: 2px; margin-bottom: 10px; display: none; line-height: 1.2; }
+    
+    /* Checkbox Consent */
+    .checkbox-container { display: flex; margin-top: 10px; font-size: 14px; color: #333; }
+    .checkbox-container input { margin: 4px 12px 0 0; transform: scale(1.2); width: auto; }
+    
+    /* ปุ่มกด */
+    button { background: #000; color: white; width: 100%; padding: 16px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    button:disabled { opacity: 0.7; cursor: wait; } /* แค่ทำให้จางลง ไม่เปลี่ยนข้อความ */
+    
+    .footer { text-align: center; margin-top: 25px; color: #999; font-size: 12px; }
+  </style>
 </head>
-
 <body>
-<div class="wrapper">
-<div class="container">
+  <div class="container">
+    <h2>Download คู่มือรถ</h2>
+    <p class="sub-head">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</p>
+    <form id="downloadForm" novalidate>
+      <input type="hidden" id="model" name="model">
+      
+      <label>ชื่อ – นามสกุล</label>
+      <input type="text" id="name" name="name" placeholder="ระบุชื่อ-นามสกุล">
+      <div class="error-text" id="err-name">กรุณากรอกชื่อ-นามสกุล</div>
 
-<h1>Download คู่มือรถ</h1>
-<div class="subtitle">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</div>
+      <label>Email</label>
+      <input type="email" id="email" name="email" placeholder="you@email.com">
+      <div class="error-text" id="err-email">กรุณากรอกอีเมลให้ถูกต้อง</div>
 
-<div class="field">
-  <label>ชื่อ – นามสกุล *</label>
-  <input id="name">
-  <div class="error-text" id="err-name"></div>
-</div>
+      <label>เบอร์โทรศัพท์</label>
+      <input type="tel" id="phone" name="phone" placeholder="08x-xxx-xxxx" maxlength="10">
+      <div class="error-text" id="err-phone">กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก</div>
 
-<div class="field">
-  <label>Email *</label>
-  <input id="email" type="email">
-  <div class="error-text" id="err-email"></div>
-</div>
+      <div class="checkbox-container">
+        <input type="checkbox" id="consent" name="consent">
+        <span>ฉันยินยอมให้บริษัทติดต่อกลับ และยอมรับนโยบายความเป็นส่วนตัว</span>
+      </div>
+      <div class="error-text" id="err-consent" style="margin-bottom: 15px;">กรุณายอมรับเงื่อนไขก่อนดาวน์โหลด</div>
 
-<div class="field">
-  <label>เบอร์โทรศัพท์ *</label>
-  <input id="phone" type="tel">
-  <div class="error-text" id="err-phone"></div>
-</div>
+      <button type="submit" id="btnSubmit">ดาวน์โหลดคู่มือ &rarr;</button>
+    </form>
+    <div class="footer">ข้อมูลของคุณจะถูกเก็บเป็นความลับ</div>
+  </div>
 
-<div class="checkbox">
-  <input type="checkbox" id="consent">
-  <label for="consent">ยินยอมให้ติดต่อกลับ *</label>
-</div>
-<div class="error-text" id="err-consent"></div>
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAQTxS5ADOjzwzz5uyixZvHM0SuQjhnH0l3FU68vS1Nc6iQEf2VlEWY2FRxZA2B8LvFA/exec';
 
-<button onclick="submitForm()">ดาวน์โหลดคู่มือ →</button>
+    // รับค่า model
+    const urlParams = new URLSearchParams(window.location.search);
+    const modelVal = urlParams.get('model') || "";
+    document.getElementById('model').value = modelVal;
 
-<div class="footer">ข้อมูลของคุณจะถูกเก็บเป็นความลับ</div>
+    const form = document.getElementById('downloadForm');
+    const btn = document.getElementById('btnSubmit');
 
-</div>
-</div>
+    function validateForm() {
+      let isValid = true;
+      document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
 
-<script>
-const ENDPOINT = "🔁 วาง Web App URL ตรงนี้";
-
-function submitForm(){
-  let valid = true;
-
-  const name = nameEl = document.getElementById("name");
-  const email = emailEl = document.getElementById("email");
-  const phone = phoneEl = document.getElementById("phone");
-  const consent = document.getElementById("consent");
-
-  clearErrors();
-
-  if(!name.value.trim()){ showError(name,"err-name","กรุณากรอกชื่อ"); valid=false; }
-  if(!email.value.trim()){ showError(email,"err-email","กรุณากรอกอีเมล"); valid=false; }
-  if(!phone.value.trim()){ showError(phone,"err-phone","กรุณากรอกเบอร์โทร"); valid=false; }
-  if(!consent.checked){ document.getElementById("err-consent").textContent="กรุณายินยอม"; valid=false; }
-
-  if(!valid) return;
-
-  fetch(ENDPOINT,{
-    method:"POST",
-    body:JSON.stringify({
-      name:name.value,
-      email:email.value,
-      phone:phone.value,
-      consent:consent.checked
-    })
-  })
-  .then(r=>r.json())
-  .then(res=>{
-    if(res.success){
-      window.location.href="manual.pdf"; // 👈 ลิงก์คู่มือ
+      const name = document.getElementById('name');
+      if (!name.value.trim()) { name.classList.add('invalid'); document.getElementById('err-name').style.display = 'block'; isValid = false; }
+      
+      const email = document.getElementById('email');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { email.classList.add('invalid'); document.getElementById('err-email').style.display = 'block'; isValid = false; }
+      
+      const phone = document.getElementById('phone');
+      if (phone.value.replace(/\D/g, '').length !== 10) { phone.classList.add('invalid'); document.getElementById('err-phone').style.display = 'block'; isValid = false; }
+      
+      const consent = document.getElementById('consent');
+      if (!consent.checked) { document.getElementById('err-consent').style.display = 'block'; isValid = false; }
+      
+      return isValid;
     }
-  });
-}
 
-function showError(input,id,msg){
-  input.classList.add("error");
-  document.getElementById(id).textContent=msg;
-}
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!validateForm()) return;
 
-function clearErrors(){
-  document.querySelectorAll(".error-text").forEach(e=>e.textContent="");
-  document.querySelectorAll("input").forEach(i=>i.classList.remove("error"));
-}
-</script>
+      // แก้ไข: ไม่เปลี่ยนข้อความปุ่มแล้ว แค่ทำให้กดซ้ำไม่ได้
+      // btn.innerHTML = "กำลังไปหน้าดาวน์โหลด..."; <--- ลบบรรทัดนี้ออกแล้ว
+      btn.disabled = true; 
 
+      fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'});
+      
+      setTimeout(() => {
+         redirectToPDF(document.getElementById('model').value);
+      }, 1500); 
+    });
+
+    function redirectToPDF(modelCode) {
+      var pdfLinks = {
+        "Nexi": "https://drive.google.com/file/d/176BzRWMbCgFNKiYgHfF5VW_BF6zIFrH0/view?usp=sharing",
+        "Vink": "https://drive.google.com/file/d/1EM_RBW6XqpOVycDKMduTkfH07nUetLyd/view?usp=sharing",
+        "Ren": "https://drive.google.com/file/d/1dP6zPRT1nRkPkRCBRMm6A9zNOn7d5vwd/view?usp=sharing",
+        "Ying": "https://drive.google.com/file/d/1A4D91rJCbVpAd8pr958xXRDGgFJcte1e/view?usp=sharing",
+        "Mew": "https://drive.google.com/file/d/1gA5igltOxVCULbjot_UplMj9GSq4Z2JG/view?usp=sharing",
+        "Slice": "https://drive.google.com/file/d/1FUXx2l15O9lqrLO9_oxq-nd5j_vrDENI/view?usp=sharing"
+      };
+
+      var targetUrl = "";
+      if(modelCode) {
+        for (var key in pdfLinks) {
+          if (key.toLowerCase() === modelCode.trim().toLowerCase()) { targetUrl = pdfLinks[key]; break; }
+        }
+      }
+      if (!targetUrl) targetUrl = pdfLinks["Nexi"];
+
+      try { window.top.location.href = targetUrl; } catch (e) { window.location.href = targetUrl; }
+    }
+  </script>
 </body>
 </html>
