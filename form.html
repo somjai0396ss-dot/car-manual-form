@@ -6,18 +6,16 @@
   <title>Download Manual</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* ตั้งค่า Body: ป้องกันหัวขาดด้วย padding-top และ align-items: flex-start */
     body { 
       font-family: 'Sarabun', sans-serif; 
       background: transparent; 
       margin: 0; 
-      padding: 30px 0 0 0; /* เว้นระยะบน 30px กันหัวขาด */
+      padding: 30px 0 0 0;
       display: flex; 
       justify-content: center; 
-      align-items: flex-start; /* เริ่มจากบนสุดเสมอ */
+      align-items: flex-start;
       min-height: 100vh;
     }
-    
     .container { 
       background: white; 
       padding: 30px 20px; 
@@ -25,25 +23,19 @@
       max-width: 500px; 
       border-radius: 12px;
     }
-    
     h2 { margin: 0 0 10px; font-size: 28px; color: #000; font-weight: 700; line-height: 1.2; }
     p.sub-head { color: #666; margin-bottom: 20px; font-size: 16px; }
-    
     label { display: block; margin-bottom: 4px; color: #555; font-size: 14px; font-weight: 500; }
-    
-    /* Input และ Error ปรับระยะให้ชิดกัน */
     input { width: 100%; padding: 14px; margin-bottom: 2px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; font-family: 'Sarabun', sans-serif; }
     input:focus { border-color: #000; }
     input.invalid { border-color: #e74c3c !important; background-color: #fff8f8; }
-    
     .error-text { color: #e74c3c; font-size: 13px; margin-top: 2px; margin-bottom: 10px; display: none; line-height: 1.2; }
-    
     .checkbox-container { display: flex; margin-top: 10px; font-size: 14px; color: #333; }
     .checkbox-container input { margin: 4px 12px 0 0; transform: scale(1.2); width: auto; }
     
-    /* ปุ่ม: กดแล้วจะแค่จางลง แต่ข้อความไม่เปลี่ยน */
+    /* ปุ่ม: กดแล้วจะแค่จางลง */
     button { background: #000; color: white; width: 100%; padding: 16px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    button:disabled { opacity: 0.5; cursor: default; } /* ทำให้จางลงเมื่อกดแล้ว */
+    button:disabled { opacity: 0.5; cursor: default; }
     
     .footer { text-align: center; margin-top: 25px; color: #999; font-size: 12px; }
   </style>
@@ -54,25 +46,20 @@
     <p class="sub-head">กรุณากรอกข้อมูลก่อนดาวน์โหลดคู่มือ</p>
     <form id="downloadForm" novalidate>
       <input type="hidden" id="model" name="model">
-      
       <label>ชื่อ – นามสกุล</label>
       <input type="text" id="name" name="name" placeholder="ระบุชื่อ-นามสกุล">
       <div class="error-text" id="err-name">กรุณากรอกชื่อ-นามสกุล</div>
-
       <label>Email</label>
       <input type="email" id="email" name="email" placeholder="you@email.com">
       <div class="error-text" id="err-email">กรุณากรอกอีเมลให้ถูกต้อง</div>
-
       <label>เบอร์โทรศัพท์</label>
       <input type="tel" id="phone" name="phone" placeholder="08x-xxx-xxxx" maxlength="10">
       <div class="error-text" id="err-phone">กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก</div>
-
       <div class="checkbox-container">
         <input type="checkbox" id="consent" name="consent">
         <span>ฉันยินยอมให้บริษัทติดต่อกลับ และยอมรับนโยบายความเป็นส่วนตัว</span>
       </div>
       <div class="error-text" id="err-consent" style="margin-bottom: 15px;">กรุณายอมรับเงื่อนไขก่อนดาวน์โหลด</div>
-
       <button type="submit" id="btnSubmit">ดาวน์โหลดคู่มือ &rarr;</button>
     </form>
     <div class="footer">ข้อมูลของคุณจะถูกเก็บเป็นความลับ</div>
@@ -80,7 +67,6 @@
 
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzAQTxS5ADOjzwzz5uyixZvHM0SuQjhnH0l3FU68vS1Nc6iQEf2VlEWY2FRxZA2B8LvFA/exec';
-
     const urlParams = new URLSearchParams(window.location.search);
     const modelVal = urlParams.get('model') || "";
     document.getElementById('model').value = modelVal;
@@ -92,19 +78,14 @@
       let isValid = true;
       document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
       document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
-
       const name = document.getElementById('name');
       if (!name.value.trim()) { name.classList.add('invalid'); document.getElementById('err-name').style.display = 'block'; isValid = false; }
-      
       const email = document.getElementById('email');
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { email.classList.add('invalid'); document.getElementById('err-email').style.display = 'block'; isValid = false; }
-      
       const phone = document.getElementById('phone');
       if (phone.value.replace(/\D/g, '').length !== 10) { phone.classList.add('invalid'); document.getElementById('err-phone').style.display = 'block'; isValid = false; }
-      
       const consent = document.getElementById('consent');
       if (!consent.checked) { document.getElementById('err-consent').style.display = 'block'; isValid = false; }
-      
       return isValid;
     }
 
@@ -112,23 +93,19 @@
       e.preventDefault();
       if (!validateForm()) return;
 
-      // --- จุดสำคัญ: ปิดปุ่มเฉยๆ แต่ไม่เปลี่ยนข้อความ ---
+      // *** จุดสำคัญ: แค่ปิดปุ่ม ไม่มีการเปลี่ยนข้อความ (innerHTML) ใดๆ ทั้งสิ้น ***
       btn.disabled = true; 
-      // ---------------------------------------------
-
-      fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'});
       
-      setTimeout(() => {
-         redirectToPDF(document.getElementById('model').value);
-      }, 1500); 
+      fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'});
+      setTimeout(() => { redirectToPDF(document.getElementById('model').value); }, 1500); 
     });
 
     function redirectToPDF(modelCode) {
+      // เพิ่ม Vinsk ให้แล้วครับ
       var pdfLinks = {
         "Nexi": "https://drive.google.com/file/d/176BzRWMbCgFNKiYgHfF5VW_BF6zIFrH0/view?usp=sharing",
         "Vink": "https://drive.google.com/file/d/1EM_RBW6XqpOVycDKMduTkfH07nUetLyd/view?usp=sharing",
         
-        // --- เพิ่ม Vinsk ให้แล้วครับ (รวมถึงคำใกล้เคียงกัน) ---
         "Vinsk": "https://drive.google.com/file/d/1EM_RBW6XqpOVycDKMduTkfH07nUetLyd/view?usp=sharing",
         "Vinks": "https://drive.google.com/file/d/1EM_RBW6XqpOVycDKMduTkfH07nUetLyd/view?usp=sharing",
         
@@ -145,7 +122,6 @@
         }
       }
       if (!targetUrl) targetUrl = pdfLinks["Nexi"];
-
       try { window.top.location.href = targetUrl; } catch (e) { window.location.href = targetUrl; }
     }
   </script>
