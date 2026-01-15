@@ -6,35 +6,32 @@
   <title>Download Manual</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* 1. ปรับ body ให้รองรับการจัดกึ่งกลาง และกันขอบบนตัด
-       - align-items: flex-start; -> สั่งให้เริ่มจากด้านบนเสมอ (แก้ปัญหาหัวขาด)
-       - padding-top: 30px; -> ดันลงมาอีกนิดเพื่อความปลอดภัย
-    */
+    /* ตั้งค่า Body: ป้องกันหัวขาดด้วย padding-top และ align-items: flex-start */
     body { 
       font-family: 'Sarabun', sans-serif; 
       background: transparent; 
       margin: 0; 
-      padding: 30px 0 0 0; /* เพิ่มระยะด้านบน 30px */
+      padding: 30px 0 0 0; /* เว้นระยะบน 30px กันหัวขาด */
       display: flex; 
       justify-content: center; 
-      align-items: flex-start; /* สำคัญ! ห้ามให้ตัดหัว */
+      align-items: flex-start; /* เริ่มจากบนสุดเสมอ */
       min-height: 100vh;
     }
-
-    /* 2. กล่องฟอร์ม */
+    
     .container { 
       background: white; 
-      padding: 30px 20px; /* เพิ่มพื้นที่ภายในกล่องให้ดูไม่อึดอัด */
+      padding: 30px 20px; 
       width: 100%; 
       max-width: 500px; 
-      border-radius: 12px; /* เพิ่มความมนให้ดูทันสมัย */
-      /* box-shadow: 0 4px 15px rgba(0,0,0,0.1); -> ถ้าอยากให้มีเงาลอยๆ ให้เปิดบรรทัดนี้ */
+      border-radius: 12px;
     }
     
     h2 { margin: 0 0 10px; font-size: 28px; color: #000; font-weight: 700; line-height: 1.2; }
     p.sub-head { color: #666; margin-bottom: 20px; font-size: 16px; }
     
     label { display: block; margin-bottom: 4px; color: #555; font-size: 14px; font-weight: 500; }
+    
+    /* Input และ Error ปรับระยะให้ชิดกัน */
     input { width: 100%; padding: 14px; margin-bottom: 2px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; font-family: 'Sarabun', sans-serif; }
     input:focus { border-color: #000; }
     input.invalid { border-color: #e74c3c !important; background-color: #fff8f8; }
@@ -44,8 +41,9 @@
     .checkbox-container { display: flex; margin-top: 10px; font-size: 14px; color: #333; }
     .checkbox-container input { margin: 4px 12px 0 0; transform: scale(1.2); width: auto; }
     
+    /* ปุ่ม: กดแล้วจะแค่จางลง แต่ข้อความไม่เปลี่ยน */
     button { background: #000; color: white; width: 100%; padding: 16px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    button:disabled { opacity: 0.7; cursor: wait; }
+    button:disabled { opacity: 0.5; cursor: default; } /* ทำให้จางลงเมื่อกดแล้ว */
     
     .footer { text-align: center; margin-top: 25px; color: #999; font-size: 12px; }
   </style>
@@ -82,6 +80,7 @@
 
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzAQTxS5ADOjzwzz5uyixZvHM0SuQjhnH0l3FU68vS1Nc6iQEf2VlEWY2FRxZA2B8LvFA/exec';
+
     const urlParams = new URLSearchParams(window.location.search);
     const modelVal = urlParams.get('model') || "";
     document.getElementById('model').value = modelVal;
@@ -112,9 +111,16 @@
     form.addEventListener('submit', e => {
       e.preventDefault();
       if (!validateForm()) return;
+
+      // --- จุดสำคัญ: ปิดปุ่มเฉยๆ แต่ไม่เปลี่ยนข้อความ ---
       btn.disabled = true; 
+      // ---------------------------------------------
+
       fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'});
-      setTimeout(() => { redirectToPDF(document.getElementById('model').value); }, 1500); 
+      
+      setTimeout(() => {
+         redirectToPDF(document.getElementById('model').value);
+      }, 1500); 
     });
 
     function redirectToPDF(modelCode) {
@@ -126,6 +132,7 @@
         "Mew": "https://drive.google.com/file/d/1gA5igltOxVCULbjot_UplMj9GSq4Z2JG/view?usp=sharing",
         "Slice": "https://drive.google.com/file/d/1FUXx2l15O9lqrLO9_oxq-nd5j_vrDENI/view?usp=sharing"
       };
+
       var targetUrl = "";
       if(modelCode) {
         for (var key in pdfLinks) {
@@ -133,6 +140,7 @@
         }
       }
       if (!targetUrl) targetUrl = pdfLinks["Nexi"];
+
       try { window.top.location.href = targetUrl; } catch (e) { window.location.href = targetUrl; }
     }
   </script>
